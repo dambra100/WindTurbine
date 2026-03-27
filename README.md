@@ -28,10 +28,9 @@ Utilises complex SQL operations (Window Functions, CTEs, Data Type Transformatio
 
 ## 📁 Repository Structure
 
-* `/infrastructure/` - `docker-compose.yml` and environment configuration files.
-* `/scripts/` - Shell scripts for ELT ingestion and automation.
-* `/sql/` - Advanced queries for rolling averages and downtime financial analysis.
-* `/data/` - Sample SCADA `.csv` extracts for local testing.
+* `01_downtime_analysis.sql` - Core logic for isolating mechanical faults from environmental data and calculating financial impact.
+* `02_rolling_average.sql` - Advanced Window Functions for filtering erratic wind gusts and smoothing telemetry.
+* `README.md` - Project documentation and architecture overview.
 
 ## 📊 Execution & Results
 
