@@ -29,8 +29,8 @@ Utilises complex SQL operations (Window Functions, CTEs, Data Type Transformatio
 ## 📁 Repository Structure
 
 * `/Infrastructure/` - Contains the `docker-compose.yml` for spinning up the local PostgreSQL environment.
-* `/Scripts/` - Shell scripts (`ingest_data.sh`) for automated ELT data ingestion and schema setup.
 * `/SQL/` - Core analytical queries and transformations (`01_downtime_analysis.sql`, `02_rolling_average.sql`).
+* `/Scripts/` - Shell scripts (`ingest_data.sh`) for automated ELT data ingestion and schema setup.
 * `README.md` - Project documentation and architecture overview.
 
 ## 📊 Execution & Results
