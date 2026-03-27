@@ -14,13 +14,10 @@ echo "✅ Database is active. Commencing ELT process..."
 # 2. Schema Setup: Create the raw staging table
 docker exec -i wind_turbine_db psql -U scada_admin -d turbine_telemetry -c "
 CREATE TABLE IF NOT EXISTS raw_scada (
-    timestamp TIMESTAMP,
-    turbine_id VARCHAR(50),
+    date_time TIMESTAMP,
     wind_speed_ms DECIMAL,
-    power_output_kw DECIMAL,
-    rotor_speed_rpm DECIMAL,
-    blade_pitch_angle DECIMAL,
-    grid_sync_status BOOLEAN
+    theoretical_power_curve DECIMAL,
+    active_power_kw DECIMAL
 );
 "
 echo "✅ Staging tables verified."
