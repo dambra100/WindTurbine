@@ -1,15 +1,42 @@
-# Wind Turbine Sensor Data Pipeline & Downtime Analysis
+# 🌪️ Wind Turbine SCADA Analytics & ELT Pipeline
 
-## Overview
-This project bridges physical infrastructure with modern data engineering. As a Mechanical Engineering graduate (BEng, Brunel University London), I engineered this local pipeline to ingest, format, and analyse raw SCADA sensor data to calculate the direct financial impact of mechanical turbine failures.
+## 📌 Project Overview
+A containerised data engineering pipeline designed to process industrial SCADA telemetry, isolate mechanical failures from environmental factors, and calculate the financial impact of turbine downtime. 
 
-## Tech Stack
-* **Infrastructure:** Local Linux Server, Docker Containerisation
-* **Database:** PostgreSQL (deployed via Docker), DBeaver
-* **Analytics:** Advanced SQL (Window Functions, Aggregations, Data Type Transformations)
-* **Version Control:** Git & GitHub
+This project demonstrates a full physical-to-digital data architecture, featuring automated data ingestion, advanced SQL window functions for signal noise reduction, and real-time visualisation capabilities.
 
-## Architecture & Process
-1. **The ELT Pipeline:** Handled massive raw `.csv` sensor datasets by extracting and loading them into PostgreSQL, executing the transformations directly within the database to standardise non-compliant European timestamps.
-2. **Downtime Financial Analysis:** Engineered SQL queries to cross-reference active wind speed against power output to identify true mechanical faults (e.g., brake failures, maintenance shutdowns, or grid disconnects). Identified a peak single-day loss of over 350,000 kW of potential energy.
-3. **Sensor Noise Reduction:** Implemented 5-interval rolling averages using advanced SQL Window Functions to smooth out erratic wind gust data and reveal true mechanical performance trends.
+## 📊 Tech Stack
+* **Database:** PostgreSQL / TimescaleDB
+* **Visualisation:** Grafana
+* **Ingestion:** Bash / Docker Exec
+* **Querying:** Advanced SQL (CTEs, Window Functions)
+
+## 📁 Repository Structure
+
+* `/Infrastructure/`
+  * `docker-compose.yaml` - Container configuration for TimescaleDB and the Grafana visualisation server.
+* `/Scripts/`
+  * `ingest_data.sh` - Automated ELT shell script for database health checks, schema setup, and query execution.
+* `/SQL/`
+  * `01_downtime_analysis.sql` - Core logic for isolating mechanical faults from environmental data and calculating financial impact.
+  * `02_rolling_average.sql` - Advanced window functions for filtering erratic wind gusts and smoothing telemetry.
+* `README.md` - Project documentation and architecture overview.
+
+## ⚙️ Core Capabilities
+
+### 1. Fault Isolation & Financial Analytics
+Identifies exact periods of mechanical or grid failure by mathematically isolating intervals where wind speed is sufficient (`> 5m/s`) but active power generation is zero. It then calculates the theoretical power lost during these blackouts to provide a quantifiable financial impact metric.
+
+### 2. Telemetry Smoothing
+Raw SCADA data is often subjected to environmental noise and sensor jitter. The pipeline employs SQL window functions (5-interval rolling averages) to smooth out erratic wind gusts, providing a cleaner, more accurate dataset for predictive maintenance analysis.
+
+### 3. Automated ELT Ingestion
+A robust Bash script handles the entire Extract, Load, and Transform (ELT) process. It verifies container health, builds the `raw_scada` staging schema, and executes the analytical SQL transformations without requiring manual database interaction.
+
+## 🚀 How to Run Locally
+
+**1. Spin up the Infrastructure**
+Navigate to the infrastructure folder and start the TimescaleDB and Grafana containers:
+```bash
+cd Infrastructure
+docker-compose up -d
