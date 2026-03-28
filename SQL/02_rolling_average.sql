@@ -5,6 +5,6 @@ SELECT
         ORDER BY date_time 
         ROWS BETWEEN 5 PRECEDING AND CURRENT ROW
     )::numeric, 2) AS rolling_avg_wind_speed
-FROM t1
+FROM raw_scada
 WHERE wind_speed_ms > 0
 LIMIT 20;
