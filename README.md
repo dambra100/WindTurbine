@@ -48,8 +48,13 @@ Provides a real-time, interactive dashboard to monitor turbine health, mechanica
 # Clone the repository
 git clone [https://github.com/dambra100/WindTurbine.git](https://github.com/dambra100/WindTurbine.git)
 
-# Navigate to the infrastructure folder and spin up the environment
+# Navigate to the infrastructure folder
 cd WindTurbine/Infrastructure
+
+# Copy the example env file and set your own credentials
+cp .env.example .env
+
+# Spin up the environment
 docker-compose up -d
 
 # Navigate to the scripts folder and execute the ELT ingestion script

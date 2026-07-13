@@ -1,0 +1,14 @@
+# Environment variables / secrets
+.env
+*.env
+!.env.example
+
+# Raw data
+/Data/
+*.csv
+
+# Logs
+*.log
+
+# OS
+.DS_Store

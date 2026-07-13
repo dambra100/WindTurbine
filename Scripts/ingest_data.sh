@@ -2,6 +2,14 @@
 
 echo "Starting Wind Turbine SCADA Data Ingestion Pipeline..."
 
+# Load DB credentials from Infrastructure/.env (see .env.example)
+set -a
+[ -f ../Infrastructure/.env ] && source ../Infrastructure/.env
+set +a
+
+DB_USER="${POSTGRES_USER:-scada_admin}"
+DB_NAME="${POSTGRES_DB:-turbine_telemetry}"
+
 # 1. Health Check: Verify the database container is running
 if ! docker ps | grep -q "wind_turbine_db"; then
     echo "❌ Error: Database container 'wind_turbine_db' is not running."
@@ -12,7 +20,7 @@ fi
 echo "✅ Database is active. Commencing ELT process..."
 
 # 2. Schema Setup: Create the raw staging table
-docker exec -i wind_turbine_db psql -U scada_admin -d turbine_telemetry -c "
+docker exec -i wind_turbine_db psql -U "$DB_USER" -d "$DB_NAME" -c "
 CREATE TABLE IF NOT EXISTS raw_scada (
     date_time TIMESTAMP,
     wind_speed_ms DECIMAL,
@@ -26,14 +34,14 @@ echo "✅ Staging tables verified."
 # Note: Ensure your raw data file is placed in a /Data folder, or adjust the path below.
 echo "📥 Loading raw telemetry data into PostgreSQL..."
 # Uncomment and update the path to your actual CSV file when you have it downloaded:
-# docker exec -i wind_turbine_db psql -U scada_admin -d turbine_telemetry -c "\copy raw_scada FROM STDIN WITH (FORMAT csv, HEADER true);" < ../Data/scada_data.csv
+# docker exec -i wind_turbine_db psql -U "$DB_USER" -d "$DB_NAME" -c "\copy raw_scada FROM STDIN WITH (FORMAT csv, HEADER true);" < ../Data/scada_data.csv
 
 # 4. Execution: Run the analytical SQL scripts
 # We use '<' to stream the local SQL files into the container's standard input
 echo "🔄 Executing noise reduction and rolling average transformations..."
-docker exec -i wind_turbine_db psql -U scada_admin -d turbine_telemetry < ../SQL/02_rolling_average.sql
+docker exec -i wind_turbine_db psql -U "$DB_USER" -d "$DB_NAME" < ../SQL/02_rolling_average.sql
 
 echo "🔄 Executing mechanical downtime and financial impact analysis..."
-docker exec -i wind_turbine_db psql -U scada_admin -d turbine_telemetry < ../SQL/01_downtime_analysis.sql
+docker exec -i wind_turbine_db psql -U "$DB_USER" -d "$DB_NAME" < ../SQL/01_downtime_analysis.sql
 
 echo "🚀 Pipeline execution complete. High-fidelity analytics ready."
