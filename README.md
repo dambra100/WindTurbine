@@ -69,6 +69,10 @@ This infrastructure calculates the direct financial and energy impact of mechani
 
 **Time-Series Relational Database (PostgreSQL / TimescaleDB)** — optimised for large-scale sensor data, acting as the central data warehouse for all ingested SCADA telemetry.
 
+<img src="Infrastructure/Images/db_schema.png" width="600">
+
+*Schema: `turbines` (device metadata) → `sensor_readings` (high-frequency telemetry) and `outage_logs` (downtime/financial-loss events), both keyed on `turbine_id`.*
+
 **Advanced SQL Analytics Engine** — utilises complex SQL operations (Window Functions, CTEs, Data Type Transformations) to execute in-database calculations and noise reduction without relying on external processing scripts.
 
 **Interactive Visualisation (Grafana)** — provides a real-time, interactive dashboard to monitor turbine health, mechanical faults, and financial losses over time.
@@ -82,7 +86,7 @@ This infrastructure calculates the direct financial and energy impact of mechani
 ### Repository Structure
 
 * `/CFD/` - CFD methodology report and figures (see Part 1 above).
-* `/Infrastructure/` - Contains the `docker-compose.yaml` for spinning up the local PostgreSQL environment and Grafana server.
+* `/Infrastructure/` - Contains the `docker-compose.yaml` for spinning up the local PostgreSQL environment and Grafana server, plus a database schema diagram (`Images/db_schema.png`).
 * `/SQL/` - Core analytical queries and transformations (`01_downtime_analysis.sql`, `02_rolling_average.sql`).
 * `/Scripts/` - Shell scripts (`ingest_data.sh`) for automated ELT data ingestion and schema setup.
 * `README.md` - Project documentation and architecture overview.
